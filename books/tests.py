@@ -96,7 +96,7 @@ class BookTests(WagtailPageTests):
 
         book_faculty_resource = BookFacultyResources.objects.find_or_create(faculty_resources_ptr=resource,
                                                                             sort_order=0,
-                                                                            book_faculty_resource=self.prealgebra_book)
+                                                                            book_faculty_resource=self.book)
         book_faculty_resource.save()
 
 
