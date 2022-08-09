@@ -46,20 +46,20 @@ class BookTests(WagtailPageTests):
         self.book_index.add_child(instance=self.book)
 
     def test_can_create_book(self):
-        self.assertEqual(self.prealgebra_book.salesforce_abbreviation, 'Prealgebra')
+        self.assertEqual(self.book.salesforce_abbreviation, 'University Phys (Calc)')
 
     # TODO: not sure what this is testing... likely not needed
     def test_can_create_ap_book(self):
-        self.assertEqual(self.prealgebra_book.salesforce_abbreviation, 'Prealgebra')
+        self.assertEqual(self.book.salesforce_abbreviation, 'University Phys (Calc)')
 
     def test_can_create_book_without_cnx_id(self):
         self.book.cnx_id = None
         self.book.save()
-        self.assertEqual(self.prealgebra_book.salesforce_abbreviation, 'Prealgebra')
+        self.assertEqual(self.book.salesforce_abbreviation, 'University Phys (Calc)')
 
     # TODO: again.. not sure what this is testing
     def test_only_numbers_for_price(self):
-        self.assertEqual(self.prealgebra_book.salesforce_abbreviation, 'Prealgebra')
+        self.assertEqual(self.book.salesforce_abbreviation, 'University Phys (Calc)')
 
     def test_allowed_subpages(self):
         self.assertAllowedSubpageTypes(BookIndex, { Book })
@@ -74,7 +74,7 @@ class BookTests(WagtailPageTests):
     def test_can_create_book_with_cc_license(self):
         self.book.license_name = 'Creative Commons Attribution License'
         self.book.save()
-        self.assertEqual(book.license_url, 'https://creativecommons.org/licenses/by/4.0/')
+        self.assertEqual(self.book.license_url, 'https://creativecommons.org/licenses/by/4.0/')
 
 
     def test_faculty_resources_available(self):
@@ -94,12 +94,8 @@ class BookTests(WagtailPageTests):
                                                  resource=faculty_resource)
         resource.save()
 
-        book_faculty_resource = BookFacultyResources.objects.find_or_create(faculty_resources_ptr=resource,
-                                                                            sort_order=0,
-                                                                            book_faculty_resource=self.book)
+        book_faculty_resource = BookFacultyResources.objects.create(book_faculty_resource=self.book)
         book_faculty_resource.save()
-
-
 
         response = self.client.get('/apps/cms/api/books/resources/?slug=university-physics')
         self.assertContains(response, 'https://openstax.org')
